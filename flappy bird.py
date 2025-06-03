@@ -154,16 +154,15 @@ def draw_pipes(pipes):
 
 
 def check_collision(bird_rect, pipes):
+    PIPE_THIN_WIDTH = 36
     for pipe in pipes:
         # Top pipe rect
-        top_pipe_rect = pygame.Rect(
-            pipe["x"], 0, pipe_image.get_width(), pipe["top_height"]
-        )
+        top_pipe_rect = pygame.Rect(pipe["x"], 0, PIPE_THIN_WIDTH, pipe["top_height"])
         # Bottom pipe rect
         bottom_pipe_rect = pygame.Rect(
             pipe["x"],
             pipe["bottom_y"],
-            pipe_image.get_width(),
+            PIPE_THIN_WIDTH,
             SCREEN_HEIGHT - pipe["bottom_y"],
         )
         if bird_rect.colliderect(top_pipe_rect) or bird_rect.colliderect(
@@ -218,7 +217,8 @@ def main():
             pipe["x"] -= pipe_speed
 
         # Remove pipes that have gone off screen
-        pipes = [pipe for pipe in pipes if pipe["x"] > -pipe_image.get_width()]
+        PIPE_THIN_WIDTH = 36
+        pipes = [pipe for pipe in pipes if pipe["x"] > -PIPE_THIN_WIDTH]
 
         # Bird rect for collision (smaller hitbox)
         hitbox_margin_x = 6
@@ -247,8 +247,9 @@ def main():
             break
 
         # Score update
+        PIPE_THIN_WIDTH = 36
         for pipe in pipes:
-            if not pipe["passed"] and pipe["x"] + pipe_image.get_width() < BIRD_X:
+            if not pipe["passed"] and pipe["x"] + PIPE_THIN_WIDTH < BIRD_X:
                 pipe["passed"] = True
                 score += 1
 
