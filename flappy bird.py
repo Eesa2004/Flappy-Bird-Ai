@@ -264,5 +264,40 @@ def main():
     sys.exit()
 
 
+# --- RL AGENT INTEGRATION ---
+import importlib
+
 if __name__ == "__main__":
-    main()
+    mode = input("Type 'ai' to train AI, 'play' to play yourself: ").strip().lower()
+    if mode == "ai":
+        # Dynamically import RL agent functions from RL agent.py
+        rl_agent = importlib.import_module("RL agent")
+        # Inject required globals from this file into RL agent module
+        rl_agent.pygame = pygame
+        rl_agent.screen = screen
+        rl_agent.bg_image = bg_image
+        rl_agent.bird_image = bird_image
+        rl_agent.bird_flip_image = bird_flip_image
+        rl_agent.pipe_image = pipe_image
+        rl_agent.pipe_image_flipped = pipe_image_flipped
+        rl_agent.font = font
+        rl_agent.clock = clock
+        rl_agent.BIRD_X = BIRD_X
+        rl_agent.BIRD_START_Y = BIRD_START_Y
+        rl_agent.SCREEN_HEIGHT = SCREEN_HEIGHT
+        rl_agent.SCREEN_WIDTH = SCREEN_WIDTH
+        rl_agent.GRAVITY = GRAVITY
+        rl_agent.FLAP_VEL = FLAP_VEL
+        rl_agent.create_pipe = create_pipe
+        rl_agent.draw_pipes = draw_pipes
+        rl_agent.check_collision = check_collision
+        rl_agent.draw_text_center = draw_text_center
+
+        print("Training AI agent (this may take a few minutes)...")
+        trained_policy = rl_agent.train_agent(num_episodes=300)
+        print("Training complete! Watching the agent play...")
+        rl_agent.watch_agent(trained_policy, num_episodes=3)
+        pygame.quit()
+        sys.exit()
+    else:
+        main()
