@@ -20,8 +20,9 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 # set the title of the window
 pygame.display.set_caption("Flappy Bird")
 
-# load the background image
+# load the background image and scale it to fit the screen
 bg_image = pygame.image.load("background.png").convert()
+bg_image = pygame.transform.scale(bg_image, (screen_width, screen_height))
 bg_image_x = 0
 
 # load the bird image and set its initial position
@@ -145,11 +146,16 @@ while running:
     #     score += 1
 
     # draw the background
-    bg_image_x -= 0.01
-    if bg_image_x + bg_image.get_width() == screen_width:
-        bg_image_x = 0
+    # Remove scrolling logic if not needed, or keep for effect
+    # bg_image_x -= 0.001
+    # if bg_image_x <= -bg_image.get_width():
+    #     bg_image_x = 0
 
-    screen.blit(bg_image, (bg_image_x, -490))
+    # Draw background to fit the screen (no scrolling)
+    screen.blit(bg_image, (0, 0))
+    # If you want seamless scrolling, use the scaled image:
+    # screen.blit(bg_image, (bg_image_x, 0))
+    # screen.blit(bg_image, (bg_image_x + bg_image.get_width(), 0))
 
     # draw the pipes
     # screen.blit(pipe_image, (pipe_x, pipe1_y - pipe_image.get_height()))
