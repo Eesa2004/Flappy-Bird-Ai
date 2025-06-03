@@ -11,7 +11,6 @@ This project demonstrates my skills in Python, game development, and AI integrat
 - **Human mode:** Play using the keyboard.
 - **AI mode:** Watch an AI agent play the game automatically.
     - **Rule-based AI:** A simple, interpretable agent that navigates pipes by tracking the gap.
-    - (Optional) **RL agent:** Easily extensible for reinforcement learning experiments.
 - **Clean codebase:** Modular, readable, and extensible Python code.
 - **Sound effects and animations** for an authentic experience.
 
@@ -22,7 +21,6 @@ This project demonstrates my skills in Python, game development, and AI integrat
 ```
 flappy-bird/
 ├── flappy bird.py      # Main game loop and UI
-├── RL agent.py         # (Optional) Reinforcement learning agent
 ├── RB_agent.py         # Rule-based AI agent (default)
 ├── assets/             # Images and sounds (not included here)
 ├── README.md           # This file
@@ -74,8 +72,9 @@ flappy-bird/
 
 ## Future Work
 
-- Improve RL agent performance and training.
+- Improve agent performance and training.
 - Add visualizations for AI decision-making.
+- Include sound effects in AI runs
 - Experiment with different AI strategies.
 
 ---
