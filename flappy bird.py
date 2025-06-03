@@ -1,7 +1,6 @@
 import pygame
 import random
 from pygame import mixer
-import time
 import sys
 
 running = True
@@ -27,6 +26,7 @@ bg_image_x = 0
 
 # load the bird image and set its initial position
 bird_image = pygame.image.load("bird.png").convert_alpha()
+bird_flip_image = pygame.image.load("bird_flip.png").convert_alpha()
 bird_x = 50
 bird_y = 200
 
@@ -41,7 +41,7 @@ bird_y = 200
 
 # set the bird's initial velocity and gravity
 bird_vel = 0
-gravity = 0.00009
+gravity = 0.1  # Increased gravity for higher FPS
 
 # set the font for game
 font = pygame.font.Font(None, 36)
@@ -49,20 +49,33 @@ font = pygame.font.Font(None, 36)
 # set the initial score
 score = 0
 
+# Preload sounds to avoid delay and allow stopping
+flap_sound = mixer.Sound("flap.wav")
+hit_sound = mixer.Sound("hit.wav")
+die_sound = mixer.Sound("die.wav")
+
+# Reserve a dedicated channel for flap sound
+flap_channel = mixer.Channel(1)
+
 
 # sound when you die:
 def death():
-    hit = mixer.Sound("hit.wav")
-    hit.play()
-    time.sleep(0.2)
-    die = mixer.Sound("die.wav")
-    die.play()
+    # Stop all sounds, play hit, stop again, then play die
+    pygame.mixer.stop()
+    hit_sound.play()
+    # Wait for hit sound to finish (block for its duration)
+    pygame.time.wait(int(hit_sound.get_length() * 1000))
+    pygame.mixer.stop()
+    die_sound.play()
+    # Optionally, wait for die sound to finish if you want to block further sounds
+    # pygame.time.wait(int(die_sound.get_length() * 1000))
 
 
 clock = pygame.time.Clock()
 
 # start loop
 while start:
+    clock.tick(120)  # Increase loop rate for responsiveness
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -70,9 +83,10 @@ while start:
             start = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                flap = mixer.Sound("flap.wav")
-                flap.play()
-                bird_vel = -0.1
+                pygame.event.pump()  # Process internal actions
+                flap_channel.stop()  # Stop previous flap sound
+                flap_channel.play(flap_sound, maxtime=150)
+                bird_vel = -4.5  # Increased flap velocity for higher FPS
                 start = False
 
     # draw the background
@@ -99,6 +113,7 @@ while start:
 
 # game loop
 while running:
+    clock.tick(120)  # Increase loop rate for responsiveness
 
     # event loop
     for event in pygame.event.get():
@@ -107,9 +122,10 @@ while running:
             game_over = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                flap = mixer.Sound("flap.wav")
-                flap.play()
-                bird_vel = -0.1
+                pygame.event.pump()
+                flap_channel.stop()  # Stop previous flap sound
+                flap_channel.play(flap_sound, maxtime=150)
+                bird_vel = -4.5  # Increased flap velocity for higher FPS
 
     # move the bird
     bird_y += bird_vel
@@ -135,8 +151,7 @@ while running:
 
     # check for collision with top or bottom of screen
     if bird_y < 0 or bird_y + bird_image.get_height() > screen_height:
-        bird_image = pygame.image.load("bird_flip.png").convert_alpha()
-        screen.blit(bird_image, (bird_x, bird_y))
+        screen.blit(bird_flip_image, (bird_x, bird_y))
         pygame.display.update()
         death()
         running = False
@@ -153,7 +168,7 @@ while running:
 
     # Draw background to fit the screen (no scrolling)
     screen.blit(bg_image, (0, 0))
-    # If you want seamless scrolling, use the scaled image:
+    # seamless scrolling, use the scaled image:
     # screen.blit(bg_image, (bg_image_x, 0))
     # screen.blit(bg_image, (bg_image_x + bg_image.get_width(), 0))
 
