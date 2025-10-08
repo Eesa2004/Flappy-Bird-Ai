@@ -10,7 +10,7 @@ This project demonstrates my skills in Python, game development, and AI integrat
 - **Classic Flappy Bird gameplay** with smooth graphics and sound.
 - **Human mode:** Play using the keyboard.
 - **AI mode:** Watch an AI agent play the game automatically.
-    - **Rule-based AI:** A simple, interpretable agent that navigates pipes by tracking the gap.
+- **Rule-based AI:** A simple, interpretable agent that navigates pipes by tracking the gap.
 - **Clean codebase:** Modular, readable, and extensible Python code.
 - **Sound effects and animations** for an authentic experience.
 
